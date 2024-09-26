@@ -237,6 +237,13 @@ export const deleteImages = async (req, res, next) => {
       imageStack.images.pull(id);
     });
 
+    // Reorder images
+    imageStack.images
+      .sort((a, b) => a.order - b.order)
+      .forEach((image, index) => {
+        image.order = index + 1;
+      });
+
     await imageStack.save();
 
     if (keyOfImages.length > 0) {
